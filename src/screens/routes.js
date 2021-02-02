@@ -1,20 +1,23 @@
-import { HashRouter as Router, Switch, Route, Redirect } from 'react-router-dom'
+import { BrowserRouter, Switch, Route } from 'react-router-dom'
 import DashBoard from './dashboard'
 import Ticket from './ticket'
+import TicketEditor from './ticketEditor'
 
 const RouteManager = () => {
 	return (
-		<Router>
+		<BrowserRouter>
 			<Switch>
 				<Route exact path='/ticket/:ticketId'>
 					<Ticket />
 				</Route>
+				<Route exact path='/create'>
+					<TicketEditor />
+				</Route>
 				<Route path='/'>
 					<DashBoard />
 				</Route>
-				<Redirect to='/' />
 			</Switch>
-		</Router>
+		</BrowserRouter>
 	)
 }
 
