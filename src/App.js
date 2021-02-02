@@ -1,5 +1,5 @@
 import Layout from './hoc/layout'
-import RouteManager from './pages/routes'
+import RouteManager from './screens/routes'
 import './AppStyles.scss'
 
 const App = () => {

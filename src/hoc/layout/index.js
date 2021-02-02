@@ -2,7 +2,7 @@ import React from 'react'
 
 const Layout = ({ children }) => {
 	return (
-		<div className='app'>
+		<div className='app container'>
 			{/* <Header /> */}
 			<main>{children}</main>
 			{/* <Footer /> */}

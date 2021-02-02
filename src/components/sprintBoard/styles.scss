@@ -1,0 +1,16 @@
+.sprint-board {
+	width: auto;
+	overflow: scroll;
+	padding: 20px 0;
+	display: flex;
+	flex-flow: column nowrap;
+	box-shadow: 0 0 5px 3px #efefef;
+
+	@media screen and (min-width: 768px) {
+		width: 100%;
+		min-height: 80vh;
+		overflow: hidden;
+		justify-content: space-around;
+		flex-flow: row wrap;
+	}
+}

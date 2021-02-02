@@ -5,33 +5,47 @@
 			"description": "",
 			"status": "",
 			"assignee": "",
-			"ticketType": "Story"
+			"type": "Story"
 		},
 		"t02": {
 			"title": "Issue of type Spike",
 			"description": "",
 			"status": "",
 			"assignee": "",
-			"ticketType": "Spike"
+			"type": "Spike"
 		},
 		"t03": {
 			"title": "Issue of type Task",
-			"description":"",
-			"status":"",
-			"assignee":"",
-			"ticketType": "Task"
+			"description": "",
+			"status": "",
+			"assignee": "",
+			"type": "Task"
 		},
 		"t04": {
 			"title": "Issue of type Bug",
-			"description":"",
-			"status":"",
-			"assignee":"",
-			"ticketType": "Bug"
+			"description": "",
+			"status": "",
+			"assignee": "",
+			"type": "Bug"
 		}
 	},
 	"dashboard": {
-		"boardTickets": ["t01", "t02", "t03", "t04"],
-		"ticketStates": ["IN-PROGRESS", "DONE", "CLOSE"],
-		"ticketTypes": ["Story", "Spike", "Task", "Bug"]
+		"boardTickets": [
+			"t01",
+			"t02",
+			"t03",
+			"t04"
+		],
+		"ticketStates": [
+			"IN-PROGRESS",
+			"DONE",
+			"CLOSE"
+		],
+		"ticketTypes": [
+			"Story",
+			"Spike",
+			"Task",
+			"Bug"
+		]
 	}
 }
