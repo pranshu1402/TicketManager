@@ -7,64 +7,82 @@ import * as actionTypes from '../../../reduxStore/actionTypes'
 import {
 	formInputChangedHandler,
 	submitFormHandler,
+	validateFormInput,
 	validateFormInputs
 } from '../ticketEditorActions'
 
-/* on form submit successfull redirect application to homepage */
-
-/* handle form validations here */
 const TicketEditor = () => {
 	const [isEditorOpen, handleEditorState] = useState(true)
-	const [isFormValid, setFormValidity] = useState(true)
 	const [isFormLoading, setFormLoading] = useState(false)
 
-	const { formData, formId } = useSelector(state => state.ticket)
+	const { formData, ticketId } = useSelector(state => state.ticket)
 	const dispatch = useDispatch()
 
 	const closeEditor = () => {
 		handleEditorState(false)
 	}
 
-	const ticketSubmitHandler = () => {
+	const ticketSubmitHandler = event => {
+		event.preventDefault()
+		const formIsValid = validateFormInputs()
 		/* send updated data to server */
-		if (validateFormInputs()) {
-			setFormValidity(true)
+		if (formIsValid) {
 			setFormLoading(true)
 
 			/* simulating the promises here */
 			new Promise((resolve, reject) => {
-				submitFormHandler(formId, formData)
-				resolve()
-			}).then(response => {
-				dispatch({
-					type: actionTypes.ADD_NEW_TICKET,
-					newTicketData: response
-				})
+				const newTicket = submitFormHandler(ticketId, formData)
+				resolve(newTicket)
 			})
+				.then(newTicketData =>
+					dispatch({
+						type: ticketId
+							? actionTypes.EDIT_TICKET_DETAILS
+							: actionTypes.ADD_NEW_TICKET,
+						newTicketData,
+						ticketId
+					})
+				)
+				.then(() => {
+					dispatch({
+						type: actionTypes.TICKET_EDITOR_CLOSED
+					})
+				})
+				.catch(() => {
+					setFormLoading(false)
+				})
+
 			/* After successfull update close the editor and redirect to homepage */
 			setTimeout(closeEditor, 1000)
 		} else {
-			setFormValidity(false)
+			const firstErrorElement = document.querySelector(
+				'.inputElement.is-invalid'
+			)
+			firstErrorElement?.focus()
+			return false
 		}
 	}
 
-	const inputUpdateHandler = (event, id) => {
-		const updatedFormData = formInputChangedHandler(event, id, formData)
+	const inputUpdateHandler = (event, inputIdentifier) => {
+		const updatedFormData = formInputChangedHandler(
+			event,
+			inputIdentifier,
+			formData
+		)
 
-		const formIsValid = validateFormInputs(updatedFormData)
-		setFormValidity(formIsValid)
+		dispatch({
+			type: actionTypes.UPDATE_EDIT_TICKET_FORM_DATA,
+			updatedFormData
+		})
+	}
 
-		if (formIsValid) {
-			dispatch({
-				type: actionTypes.UPDATE_EDIT_TICKET_FORM_DATA,
-				updatedFormData
-			})
-		} else {
-			const firstErrorElement = document.querySelector(
-				'.inputElement.invalid'
-			)
-			firstErrorElement?.focus()
-		}
+	const onInputBlur = (event, inputIdentifier) => {
+		const updatedFormData = validateFormInput(formData, inputIdentifier)
+
+		dispatch({
+			type: actionTypes.UPDATE_EDIT_TICKET_FORM_DATA,
+			updatedFormData
+		})
 	}
 
 	const formElementsArray = []
@@ -82,9 +100,6 @@ const TicketEditor = () => {
 			closeModal={closeEditor}
 			heading={'Ticket Editor'}
 		>
-			{isFormValid ? null : (
-				<div className='alert alert-danger'>{`Please provide data in all fields`}</div>
-			)}
 			<form onSubmit={ticketSubmitHandler}>
 				{formElementsArray &&
 					formElementsArray.map(formElement => (
@@ -92,6 +107,7 @@ const TicketEditor = () => {
 							key={formElement.id}
 							elementType={formElement.config.elementType}
 							elementConfig={formElement.config.elementConfig}
+							labelText={formElement.config.label}
 							value={formElement.config.value}
 							invalid={!formElement.config.valid}
 							shouldValidate={formElement.config.validation}
@@ -99,13 +115,16 @@ const TicketEditor = () => {
 							changed={event =>
 								inputUpdateHandler(event, formElement.id)
 							}
+							blurHandler={event =>
+								onInputBlur(event, formElement.id)
+							}
 						/>
 					))}
 				<div className='mb-3'>
 					<button
 						type='submit'
 						className='btn btn-primary'
-						disabled={!isFormValid || isFormLoading}
+						disabled={isFormLoading}
 					>
 						{isFormLoading ? `SUBMIT...` : `SUBMIT`}
 					</button>

@@ -28,11 +28,31 @@ export const validateFormInputs = formData => {
 	for (let inputIdentifier in formData) {
 		const formElement = formData[inputIdentifier]
 		formIsValid =
-			checkValidity(formElement.value, formElement.validation) &&
-			formIsValid
+			checkValidity(
+				formElement.value,
+				formElement.validation,
+				formElement.touched
+			) && formIsValid
 	}
 
 	return formIsValid
+}
+
+export const validateFormInput = (formData, inputIdentifier) => {
+	const updatedFormData = { ...formData }
+	const updatedFormElement = {
+		...updatedFormData[inputIdentifier]
+	}
+
+	updatedFormElement.valid = checkValidity(
+		updatedFormElement.value,
+		updatedFormElement.validation,
+		updatedFormElement.touched
+	)
+
+	updatedFormData[inputIdentifier] = updatedFormElement
+
+	return updatedFormData
 }
 
 export const formInputChangedHandler = (event, inputIdentifier, formData) => {
@@ -43,11 +63,8 @@ export const formInputChangedHandler = (event, inputIdentifier, formData) => {
 		...formData[inputIdentifier]
 	}
 	updatedFormElement.value = event.target.value
-	updatedFormElement.valid = checkValidity(
-		updatedFormElement.value,
-		updatedFormElement.validation
-	)
 	updatedFormElement.touched = true
+
 	updatedFormData[inputIdentifier] = updatedFormElement
 
 	return updatedFormData
