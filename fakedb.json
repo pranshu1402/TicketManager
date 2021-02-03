@@ -30,12 +30,6 @@
 		}
 	},
 	"dashboard": {
-		"boardTickets": [
-			"t01",
-			"t02",
-			"t03",
-			"t04"
-		],
 		"ticketStates": [
 			"IN-PROGRESS",
 			"DONE",

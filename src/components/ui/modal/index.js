@@ -1,5 +1,3 @@
-import { useState } from 'react'
-import { Redirect } from 'react-router-dom'
 import Portal from '../../../hoc/portal'
 import './style.scss'
 
@@ -21,8 +19,9 @@ const Modal = ({
 							type='button'
 							onClick={closeModal}
 							className='btn btn-close'
+							aria-label='Close'
 						>
-							x
+							X
 						</button>
 					</header>
 					<div className='modal-body'>{children}</div>

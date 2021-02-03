@@ -1,9 +1,9 @@
 import React from 'react'
-import './inputStyles.scss'
+// import './inputStyles.scss'
 
 const Input = props => {
 	let inputElement = null
-	const inputClasses = ['inputElement']
+	const inputClasses = ['inputElement form-control']
 
 	if (props.invalid && props.shouldValidate && props.touched) {
 		inputClasses.push('invalid')
@@ -57,7 +57,7 @@ const Input = props => {
 	}
 
 	return (
-		<div className='input-container'>
+		<div className='input-container mb-3'>
 			<label className='label'>{props.label}</label>
 			{inputElement}
 		</div>
