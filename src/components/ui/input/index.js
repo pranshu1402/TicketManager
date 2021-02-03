@@ -65,7 +65,7 @@ const Input = props => {
 			<label className='form-label'>{props.labelText}</label>
 			{inputElement}
 			{props.invalid ? (
-				<div class='invalid-feedback'>
+				<div className='invalid-feedback'>
 					<span>{feedbackMessage}</span>
 				</div>
 			) : null}

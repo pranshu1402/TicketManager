@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { Redirect } from 'react-router-dom'
 import Modal from '../../../components/ui/modal'
@@ -14,9 +14,14 @@ import {
 const TicketEditor = () => {
 	const [isEditorOpen, handleEditorState] = useState(true)
 	const [isFormLoading, setFormLoading] = useState(false)
+	const [isFormValid, setFormValidity] = useState(true)
 
 	const { formData, ticketId } = useSelector(state => state.ticket)
 	const dispatch = useDispatch()
+
+	useEffect(() => {
+		focusFirstErrorField()
+	}, [isFormValid])
 
 	const closeEditor = () => {
 		handleEditorState(false)
@@ -24,7 +29,8 @@ const TicketEditor = () => {
 
 	const ticketSubmitHandler = event => {
 		event.preventDefault()
-		const formIsValid = validateFormInputs()
+		const { updatedFormData, formIsValid } = validateFormInputs(formData)
+
 		/* send updated data to server */
 		if (formIsValid) {
 			setFormLoading(true)
@@ -49,18 +55,28 @@ const TicketEditor = () => {
 					})
 				})
 				.catch(() => {
+					setFormValidity(true)
 					setFormLoading(false)
 				})
 
 			/* After successfull update close the editor and redirect to homepage */
 			setTimeout(closeEditor, 1000)
 		} else {
-			const firstErrorElement = document.querySelector(
-				'.inputElement.is-invalid'
-			)
-			firstErrorElement?.focus()
+			setFormValidity(false)
+			dispatch({
+				type: actionTypes.UPDATE_EDIT_TICKET_FORM_DATA,
+				updatedFormData
+			})
+
 			return false
 		}
+	}
+
+	const focusFirstErrorField = () => {
+		const firstErrorElement = document.querySelector(
+			'.inputElement.is-invalid'
+		)
+		firstErrorElement?.focus()
 	}
 
 	const inputUpdateHandler = (event, inputIdentifier) => {
@@ -85,15 +101,6 @@ const TicketEditor = () => {
 		})
 	}
 
-	const formElementsArray = []
-
-	for (let key in formData) {
-		formElementsArray.push({
-			id: key,
-			config: formData[key]
-		})
-	}
-
 	return isEditorOpen ? (
 		<Modal
 			isOpen={isEditorOpen}
@@ -101,25 +108,25 @@ const TicketEditor = () => {
 			heading={'Ticket Editor'}
 		>
 			<form onSubmit={ticketSubmitHandler}>
-				{formElementsArray &&
-					formElementsArray.map(formElement => (
+				{Object.keys(formData).map(dataKey => {
+					const formElement = formData[dataKey]
+					return (
 						<Input
-							key={formElement.id}
-							elementType={formElement.config.elementType}
-							elementConfig={formElement.config.elementConfig}
-							labelText={formElement.config.label}
-							value={formElement.config.value}
-							invalid={!formElement.config.valid}
-							shouldValidate={formElement.config.validation}
-							touched={formElement.config.touched}
+							key={dataKey}
+							elementType={formElement.elementType}
+							elementConfig={formElement.elementConfig}
+							labelText={formElement.label}
+							value={formElement.value}
+							invalid={!formElement.valid}
+							shouldValidate={formElement.validation}
+							touched={formElement.touched}
 							changed={event =>
-								inputUpdateHandler(event, formElement.id)
+								inputUpdateHandler(event, dataKey)
 							}
-							blurHandler={event =>
-								onInputBlur(event, formElement.id)
-							}
+							blurHandler={event => onInputBlur(event, dataKey)}
 						/>
-					))}
+					)
+				})}
 				<div className='mb-3'>
 					<button
 						type='submit'
