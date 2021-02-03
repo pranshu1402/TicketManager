@@ -6,7 +6,8 @@ import Input from '../../../components/ui/input'
 import * as actionTypes from '../../../reduxStore/actionTypes'
 import {
 	formInputChangedHandler,
-	submitFormHandler
+	submitFormHandler,
+	validateFormInputs
 } from '../ticketEditorActions'
 
 /* on form submit successfull redirect application to homepage */
@@ -26,29 +27,39 @@ const TicketEditor = () => {
 
 	const ticketSubmitHandler = () => {
 		/* send updated data to server */
-		if (isFormValid) {
+		if (validateFormInputs()) {
+			setFormValidity(true)
 			setFormLoading(true)
-			submitFormHandler(formId, formData)
+
+			/* simulating the promises here */
+			new Promise((resolve, reject) => {
+				submitFormHandler(formId, formData)
+				resolve()
+			}).then(response => {
+				dispatch({
+					type: actionTypes.ADD_NEW_TICKET,
+					newTicketData: response
+				})
+			})
 			/* After successfull update close the editor and redirect to homepage */
-			setTimeout(closeEditor, 1500)
+			setTimeout(closeEditor, 1000)
+		} else {
+			setFormValidity(false)
 		}
 	}
 
 	const inputUpdateHandler = (event, id) => {
-		const { updatedFormData, formIsValid } = formInputChangedHandler(
-			event,
-			id,
-			formData
-		)
+		const updatedFormData = formInputChangedHandler(event, id, formData)
 
-		dispatch({
-			type: actionTypes.UPDATE_EDIT_TICKET_FORM_DATA,
-			updatedFormData
-		})
-
+		const formIsValid = validateFormInputs(updatedFormData)
 		setFormValidity(formIsValid)
 
-		if (!formIsValid) {
+		if (formIsValid) {
+			dispatch({
+				type: actionTypes.UPDATE_EDIT_TICKET_FORM_DATA,
+				updatedFormData
+			})
+		} else {
 			const firstErrorElement = document.querySelector(
 				'.inputElement.invalid'
 			)
@@ -96,7 +107,7 @@ const TicketEditor = () => {
 						className='btn btn-primary'
 						disabled={!isFormValid || isFormLoading}
 					>
-						{isFormLoading ? `Submit...` : `SUBMIT`}
+						{isFormLoading ? `SUBMIT...` : `SUBMIT`}
 					</button>
 				</div>
 			</form>

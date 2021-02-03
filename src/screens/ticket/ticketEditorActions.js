@@ -19,9 +19,22 @@ export const submitFormHandler = (formId, formData) => {
 	for (let formElementIdentifier in formData) {
 		newTicket[formElementIdentifier] = formData[formElementIdentifier].value
 	}
+	return newTicket
 }
 
 /* Form validations */
+export const validateFormInputs = formData => {
+	let formIsValid = true
+	for (let inputIdentifier in formData) {
+		const formElement = formData[inputIdentifier]
+		formIsValid =
+			checkValidity(formElement.value, formElement.validation) &&
+			formIsValid
+	}
+
+	return formIsValid
+}
+
 export const formInputChangedHandler = (event, inputIdentifier, formData) => {
 	const updatedFormData = {
 		...formData
@@ -37,10 +50,5 @@ export const formInputChangedHandler = (event, inputIdentifier, formData) => {
 	updatedFormElement.touched = true
 	updatedFormData[inputIdentifier] = updatedFormElement
 
-	let formIsValid = true
-	for (let inputIdentifier in updatedFormData) {
-		formIsValid = updatedFormData[inputIdentifier].valid && formIsValid
-	}
-
-	return { updatedFormData, formIsValid }
+	return updatedFormData
 }

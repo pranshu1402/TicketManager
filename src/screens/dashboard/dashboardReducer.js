@@ -45,11 +45,25 @@ const dashboardReducer = (state = initialState, action) => {
 			newState = { ...state, ...action.stateData }
 			break
 		case actionTypes.AUTO_CLOSE_TICKET:
-		/* Same as updating ticket status */
+			newState = {
+				...state,
+				tickets: action.tickets
+			}
+			break
 		case actionTypes.UPDATE_TICKET_STATUS:
 			newState = {
 				...state,
 				tickets: action.tickets
+			}
+			break
+		case actionTypes.ADD_NEW_TICKET:
+			const ticketNum = Object.keys(state.tickets).length
+			newState = {
+				...state,
+				tickets: {
+					...state.tickets,
+					[`t${ticketNum + 1}`]: action.newTicketData
+				}
 			}
 			break
 		default:
