@@ -1,21 +1,10 @@
 import * as actionTypes from '../../reduxStore/actionTypes'
 
-function updateTicketStatus(tickets, ticketID, newStatus, dispatchFunc) {
+function updateTicketStatus(tickets, ticketID, newStatus) {
 	if (!ticketID) return tickets
 
 	const ticketToUpdate = { ...tickets[ticketID] }
 	ticketToUpdate.status = newStatus
-
-	if (ticketToUpdate.timer) {
-		clearTimeout(ticketToUpdate.timer)
-	}
-
-	if (newStatus === 'DONE') {
-		const newTimer = setStatusUpdateTimer(dispatchFunc, tickets, ticketID)
-		ticketToUpdate.timer = newTimer
-	} else {
-		ticketToUpdate.timer = null
-	}
 
 	tickets[ticketID] = ticketToUpdate
 
@@ -33,6 +22,29 @@ function setStatusUpdateTimer(ticketUpdateHandler, tickets, ticketId) {
 	return timer
 }
 
+export const handleTicketTimer = (tickets, dispatchFunc) => {
+	Object.keys(tickets).map(ticketKey => {
+		const ticketToUpdate = { ...tickets[ticketKey] }
+
+		if (ticketToUpdate.status === 'DONE') {
+			if (!ticketToUpdate.timer) {
+				const newTimer = setStatusUpdateTimer(
+					dispatchFunc,
+					tickets,
+					ticketKey
+				)
+				ticketToUpdate.timer = newTimer
+			}
+		} else {
+			clearTimeout(ticketToUpdate.timer)
+			ticketToUpdate.timer = null
+		}
+
+		tickets[ticketKey] = ticketToUpdate
+		return ''
+	})
+}
+
 /* handle dropping of item */
 export const handleOnDragEnd = (event, tickets, dispatchFunc) => {
 	if (!event.destination) return
@@ -40,8 +52,12 @@ export const handleOnDragEnd = (event, tickets, dispatchFunc) => {
 	const ticketId = event.draggableId
 	const status = event.destination.droppableId
 
+	const updatedTickets = updateTicketStatus(tickets, ticketId, status)
+
+	handleTicketTimer(updatedTickets, dispatchFunc)
+
 	dispatchFunc({
 		type: actionTypes.UPDATE_TICKET_STATUS,
-		tickets: updateTicketStatus(tickets, ticketId, status, dispatchFunc)
+		tickets: updatedTickets
 	})
 }

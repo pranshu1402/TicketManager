@@ -34,13 +34,21 @@ function getTicketCards(tickets = [], statusName) {
 				)}
 			</Draggable>
 		) : (
-			<li className='ticket-card-wrapper'>
-				<TicketCard
-					// id={ticket.id}
-					ticketTitle={ticket.title}
-					ticketType={ticket.type}
-				/>
-			</li>
+			<Link
+				key={`${ticket.id}_${ticket.status}`}
+				to={{
+					pathname: `/ticket/${ticket.id}`,
+					ticketDetails: ticket
+				}}
+			>
+				<li className='ticket-card-wrapper'>
+					<TicketCard
+						// id={ticket.id}
+						ticketTitle={ticket.title}
+						ticketType={ticket.type}
+					/>
+				</li>
+			</Link>
 		)
 	)
 }

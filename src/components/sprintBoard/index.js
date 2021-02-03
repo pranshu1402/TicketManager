@@ -1,6 +1,10 @@
+import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { DragDropContext } from 'react-beautiful-dnd'
-import { handleOnDragEnd } from '../../screens/dashboard/dashboardActions'
+import {
+	handleOnDragEnd,
+	handleTicketTimer
+} from '../../screens/dashboard/dashboardActions'
 import TicketStatusBoard from '../ticketStatusBoard'
 import './styles.scss'
 
@@ -24,6 +28,16 @@ const SprintBoard = () => {
 	const { ticketStates, tickets } = useSelector(state => state.dashboard)
 	const dispatch = useDispatch()
 	const dispatchFunc = action => dispatch(action)
+
+	/* updating timers on component mount */
+	useEffect(() => {
+		const updatedTickets = { ...tickets }
+		handleTicketTimer(updatedTickets, dispatchFunc)
+		dispatch({
+			type: 'UPDATE_TICKET_TIMERS',
+			tickets: updatedTickets
+		})
+	}, [])
 
 	const statusColumns = getStatusColumns(ticketStates, tickets, dispatch)
 	return (

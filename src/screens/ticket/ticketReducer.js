@@ -1,7 +1,10 @@
 /* Create Ticket */
 /* Edit Ticket */
 import * as actionTypes from '../../reduxStore/actionTypes'
-import { handleEditTicketInitiation } from './ticketEditorActions'
+import {
+	handleEditTicketInitiation,
+	editTicketStatusActions
+} from './ticketEditorActions'
 
 const initialState = {
 	ticketId: null,
@@ -63,6 +66,42 @@ const initialState = {
 			validation: {},
 			valid: true
 		}
+	},
+	ticketActions: {
+		'IN-PROGRESS': [
+			{
+				value: 'IN-PROGRESS',
+				displayValue: 'IN-PROGRESS'
+			},
+			{
+				value: 'DONE',
+				displayValue: 'DONE'
+			},
+			{
+				value: 'CLOSE',
+				displayValue: 'CLOSE'
+			}
+		],
+		DONE: [
+			{
+				value: 'IN-PROGRESS',
+				displayValue: 'Not Fix'
+			},
+			{
+				value: 'DONE',
+				displayValue: 'DONE'
+			},
+			{
+				value: 'CLOSE',
+				displayValue: 'CLOSE'
+			}
+		],
+		CLOSE: [
+			{
+				value: 'CLOSE',
+				displayValue: 'CLOSE'
+			}
+		]
 	}
 }
 
@@ -72,8 +111,12 @@ const ticketReducer = (state = initialState, action) => {
 		case actionTypes.EDIT_TICKET_DETAILS_INIT:
 			const newFormData = handleEditTicketInitiation(
 				action.ticketData,
-				state.formData
+				state.formData,
+				state.ticketActions
 			)
+
+			editTicketStatusActions(newFormData, state.ticketActions, 'status')
+
 			newState = {
 				...state,
 				formData: newFormData,
