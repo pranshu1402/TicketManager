@@ -1,4 +1,5 @@
 import { Droppable, Draggable } from 'react-beautiful-dnd'
+import { Link } from 'react-router-dom'
 import TicketCard from '../ticketCard'
 import './ticketStatusStyles.scss'
 
@@ -18,11 +19,17 @@ function getTicketCards(tickets = [], statusName) {
 						{...provided.draggableProps}
 						{...provided.dragHandleProps}
 					>
-						<TicketCard
-							// id={ticket.id}
-							ticketTitle={ticket.title}
-							ticketType={ticket.type}
-						/>
+						<Link
+							to={{
+								pathname: `/ticket/${ticket.id}`,
+								ticketDetails: ticket
+							}}
+						>
+							<TicketCard
+								ticketTitle={ticket.title}
+								ticketType={ticket.type}
+							/>
+						</Link>
 					</li>
 				)}
 			</Draggable>

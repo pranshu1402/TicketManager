@@ -1,3 +1,0 @@
-/* Form Submission */
-
-/* Form validations */

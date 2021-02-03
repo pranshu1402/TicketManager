@@ -1,8 +1,53 @@
-import { useParams } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+import { useLocation, useParams, Redirect } from 'react-router-dom'
+import { EDIT_TICKET_DETAILS_INIT } from '../../reduxStore/actionTypes'
+import './styles.scss'
 
 const Ticket = () => {
 	const { ticketId } = useParams()
-	return <div>{`Displaying Ticket ${ticketId}`}</div>
+	const { ticketDetails } = useLocation()
+	const [editStatus, setEditStatus] = useState(false)
+	const dispatch = useDispatch()
+
+	if (!ticketDetails) {
+		return <Redirect to='/' />
+	}
+
+	const handleTicketEdit = () => {
+		dispatch({
+			type: EDIT_TICKET_DETAILS_INIT,
+			ticketData: ticketDetails,
+			ticketId
+		})
+
+		setEditStatus(true)
+	}
+
+	return editStatus ? (
+		<Redirect to='/edit' />
+	) : (
+		<div className='card ticket'>
+			<header className='card-header ticket-header'>
+				<h2 className='card-title'>{`${ticketDetails.type} | ${ticketDetails.title}`}</h2>
+				<button className='btn btn-primary' onClick={handleTicketEdit}>
+					Edit Ticket
+				</button>
+			</header>
+			<section className='card-body ticket-details'>
+				<p className='card-text ticket-description'>
+					{ticketDetails.description}
+				</p>
+				<div className='card-text other-details'>
+					<div className='ticket-status'>
+						<button className='btn btn-primary' disabled>
+							{ticketDetails.status}
+						</button>
+					</div>
+				</div>
+			</section>
+		</div>
+	)
 }
 
 export default Ticket

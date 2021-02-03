@@ -1,7 +1,7 @@
 import { BrowserRouter, Switch, Route } from 'react-router-dom'
 import DashBoard from './dashboard'
 import Ticket from './ticket'
-import TicketEditor from './ticketEditor'
+import TicketEditor from './ticket/ticketEditor'
 
 const RouteManager = () => {
 	return (
@@ -11,6 +11,9 @@ const RouteManager = () => {
 					<Ticket />
 				</Route>
 				<Route exact path='/create'>
+					<TicketEditor />
+				</Route>
+				<Route exact path='/edit'>
 					<TicketEditor />
 				</Route>
 				<Route path='/'>
