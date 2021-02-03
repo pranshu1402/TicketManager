@@ -1,12 +1,11 @@
 import React from 'react'
-// import './inputStyles.scss'
 
 const Input = props => {
 	let inputElement = null
 	const inputClasses = ['inputElement form-control']
 
 	if (props.invalid && props.shouldValidate && props.touched) {
-		inputClasses.push('invalid')
+		inputClasses.push('is-invalid')
 	}
 
 	switch (props.elementType) {
@@ -17,6 +16,7 @@ const Input = props => {
 					{...props.elementConfig}
 					value={props.value}
 					onChange={props.changed}
+					onBlur={props.blurHandler}
 				/>
 			)
 			break
@@ -27,6 +27,7 @@ const Input = props => {
 					{...props.elementConfig}
 					value={props.value}
 					onChange={props.changed}
+					onBlur={props.blurHandler}
 				/>
 			)
 			break
@@ -56,10 +57,18 @@ const Input = props => {
 			)
 	}
 
+	const feedbackMessage =
+		props.errorMessage || `${props.labelText} is required`
+
 	return (
 		<div className='input-container mb-3'>
-			<label className='label'>{props.label}</label>
+			<label className='form-label'>{props.labelText}</label>
 			{inputElement}
+			{props.invalid ? (
+				<div class='invalid-feedback'>
+					<span>{feedbackMessage}</span>
+				</div>
+			) : null}
 		</div>
 	)
 }

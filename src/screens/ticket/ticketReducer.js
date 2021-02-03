@@ -12,11 +12,12 @@ const initialState = {
 				type: 'text',
 				placeholder: 'Please Enter Ticket Title'
 			},
+			label: 'Title',
 			value: '',
 			validation: {
 				required: true
 			},
-			valid: false,
+			valid: true,
 			touched: false
 		},
 		description: {
@@ -25,11 +26,12 @@ const initialState = {
 				type: 'text',
 				placeholder: 'Please enter issue description'
 			},
+			label: 'Description',
 			value: '',
 			validation: {
 				required: true
 			},
-			valid: false,
+			valid: true,
 			touched: false
 		},
 		type: {
@@ -42,6 +44,7 @@ const initialState = {
 					{ value: 'Bug', displayValue: 'Bug' }
 				]
 			},
+			label: 'Ticket Type',
 			value: 'Story',
 			validation: {},
 			valid: true
@@ -55,6 +58,7 @@ const initialState = {
 					{ value: 'CLOSE', displayValue: 'CLOSE' }
 				]
 			},
+			label: 'Status',
 			value: 'IN-PROGRESS',
 			validation: {},
 			valid: true
@@ -82,6 +86,9 @@ const ticketReducer = (state = initialState, action) => {
 				formData: action.updatedFormData
 			}
 
+			break
+		case actionTypes.TICKET_EDITOR_CLOSED:
+			newState = initialState
 			break
 		default:
 			newState = state

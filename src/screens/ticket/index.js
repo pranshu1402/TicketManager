@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
-import { useLocation, useParams, Redirect } from 'react-router-dom'
+import { useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { useLocation, useParams, Redirect, Link } from 'react-router-dom'
 import { EDIT_TICKET_DETAILS_INIT } from '../../reduxStore/actionTypes'
 import './styles.scss'
 
@@ -33,6 +33,9 @@ const Ticket = () => {
 				<button className='btn btn-primary' onClick={handleTicketEdit}>
 					Edit Ticket
 				</button>
+				<Link to='/' className='btn btn-primary'>
+					Dashboard
+				</Link>
 			</header>
 			<section className='card-body ticket-details'>
 				<p className='card-text ticket-description'>
