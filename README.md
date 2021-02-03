@@ -1,4 +1,4 @@
-# Ticket Manager : A simplified issue tracking app built React
+# Ticket Manager : A simplified issue tracking app built in ReactJs
 
 
 # Getting Started with `Ticket Manager`
