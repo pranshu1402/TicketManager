@@ -13,11 +13,23 @@ export const handleEditTicketInitiation = (ticketData, formData) => {
 	return newFormData
 }
 
+export const editTicketStatusActions = (newFormData, ticketActions, key) => {
+	const newFieldData = newFormData[key]
+	newFieldData.elementConfig.options = ticketActions[newFieldData.value]
+}
+
 /* Form Submission */
 export const submitFormHandler = (formId, formData) => {
 	const newTicket = {}
 	for (let formElementIdentifier in formData) {
-		newTicket[formElementIdentifier] = formData[formElementIdentifier].value
+		let newValue = formData[formElementIdentifier].value
+
+		/* Replacing Not fixed tickets with In progress state for displaying in correct bucket */
+		if (newValue === 'Not Fix') {
+			newValue = 'IN-PROGRESS'
+		}
+
+		newTicket[formElementIdentifier] = newValue
 	}
 	return newTicket
 }

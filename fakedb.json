@@ -40,6 +40,42 @@
 			"Spike",
 			"Task",
 			"Bug"
-		]
+		],
+		"ticketActions": {
+			"IN-PROGRESS": [
+				{
+					"value": "IN-PROGRESS",
+					"displayValue": "IN-PROGRESS"
+				},
+				{
+					"value": "DONE",
+					"displayValue": "DONE"
+				},
+				{
+					"value": "CLOSE",
+					"displayValue": "CLOSE"
+				}
+			],
+			"DONE": [
+				{
+					"value": "IN-PROGRESS",
+					"displayValue": "Not Fix"
+				},
+				{
+					"value": "DONE",
+					"displayValue": "DONE"
+				},
+				{
+					"value": "CLOSE",
+					"displayValue": "CLOSE"
+				}
+			],
+			"CLOSE": [
+				{
+					"value": "CLOSE",
+					"displayValue": "CLOSE"
+				}
+			]
+		}
 	}
 }

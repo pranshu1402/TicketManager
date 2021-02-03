@@ -30,12 +30,17 @@ const Ticket = () => {
 		<div className='card ticket'>
 			<header className='card-header ticket-header'>
 				<h2 className='card-title'>{`${ticketDetails.type} | ${ticketDetails.title}`}</h2>
-				<button className='btn btn-primary' onClick={handleTicketEdit}>
-					Edit Ticket
-				</button>
-				<Link to='/' className='btn btn-primary'>
-					Dashboard
-				</Link>
+				<div className='button-container'>
+					<button
+						className='btn btn-primary'
+						onClick={handleTicketEdit}
+					>
+						Edit Ticket
+					</button>
+					<Link to='/' className='btn btn-primary'>
+						Dashboard
+					</Link>
+				</div>
 			</header>
 			<section className='card-body ticket-details'>
 				<p className='card-text ticket-description'>

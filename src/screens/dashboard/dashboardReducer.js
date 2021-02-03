@@ -56,6 +56,12 @@ const dashboardReducer = (state = initialState, action) => {
 				tickets: action.tickets
 			}
 			break
+		case actionTypes.UPDATE_TICKET_TIMERS:
+			newState = {
+				...state,
+				tickets: action.tickets
+			}
+			break
 		case actionTypes.ADD_NEW_TICKET:
 			const numTickets = Object.keys(state.tickets).length
 			const ticketId = `t0${numTickets + 1}`

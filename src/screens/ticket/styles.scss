@@ -1,15 +1,20 @@
 .ticket {
-	margin-top: 30px;
+	margin: 50px;
 	.ticket-header {
 		display: flex;
 		justify-content: space-between;
 		padding: 20px;
-		margin: 20px;
 	}
 
-	.ticket-details {
+	.button-container {
+		button {
+			margin: 0 20px;
+		}
 	}
 
-	.other-details {
-	}
+	// .ticket-details {
+	// }
+
+	// .other-details {
+	// }
 }
