@@ -1,14 +1,11 @@
-export const checkValidity = (value, rules, touched) => {
+export const checkValidity = (value, rules) => {
 	let isValid = true
-	if (!rules) {
-		return true
+
+	if (rules && rules.required) {
+		isValid = value.trim() !== ''
 	}
 
-	if (rules.required && touched) {
-		isValid = value.trim() !== '' && isValid
-	}
-
-	/* More rules will be added */
+	/* More rules to be added */
 
 	return isValid
 }
